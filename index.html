@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coaching IA: bien utiliser son mac</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            min-height: 90vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #4CAF50;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #1e3c72;
+            border-bottom: 3px solid #1e3c72;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .lesson-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .lesson-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: #1e3c72;
+        }
+
+        .lesson-card.completed {
+            border-color: #4CAF50;
+            background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e8 100%);
+        }
+
+        .lesson-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #1e3c72;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .lesson-number.completed {
+            background: #4CAF50;
+        }
+
+        .lesson-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #1e3c72;
+        }
+
+        .lesson-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .lesson-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .lesson-duration {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .lesson-detail {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .lesson-detail.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lesson-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .lesson-content h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .lesson-content h4 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .shortcut {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 1.1em;
+            text-align: center;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .exercise-box {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+            border: 2px solid #4CAF50;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .exercise-title {
+            color: #2e7d32;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 1.2em;
+            color: #1e3c72;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .achievement {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 2px solid #ff9800;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .lesson-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" id="backBtn">←</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Coaching IA: bien utiliser son mac</h1>
+            <p>Votre assistant personnel pour maîtriser macOS pas à pas</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('lessons')">📚 Cours</button>
+            <button class="nav-tab" onclick="showTab('progress')">📊 Progrès</button>
+            <button class="nav-tab" onclick="showTab('practice')">🎯 Exercices</button>
+        </div>
+
+        <div class="content">
+            <div id="lessonsTab" class="tab-content">
+                <div class="lesson-grid" id="lessonGrid">
+                    <!-- Les leçons seront générées par JavaScript -->
+                </div>
+                <div class="lesson-detail" id="lessonDetail">
+                    <!-- Le détail de la leçon apparaîtra ici -->
+                </div>
+            </div>
+
+            <div id="progressTab" class="tab-content" style="display: none;">
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="completedLessons">0</div>
+                        <div class="stat-label">Leçons terminées</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalTime">0</div>
+                        <div class="stat-label">Minutes d'apprentissage</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="streak">0</div>
+                        <div class="stat-label">Jours consécutifs</div>
+                    </div>
+                </div>
+                <div id="achievements"></div>
+            </div>
+
+            <div id="practiceTab" class="tab-content" style="display: none;">
+                <h2>🎯 Exercices Pratiques</h2>
+                <div id="practiceExercises">
+                    <!-- Les exercices seront générés dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données des leçons
+        const lessons = [
+            {
+                id: 1,
+                title: "Les captures d'écran",
+                icon: "📸",
+                description: "Apprendre les raccourcis Cmd+Maj+3 et Cmd+Maj+4 pour capturer votre écran",
+                duration: "10 min",
+                content: {
+                    theory: `
+                        <h3>🎯 Objectif de la leçon</h3>
+                        <p>Apprendre à faire des captures d'écran sur macOS pour sauvegarder ou partager ce que vous voyez à l'écran.</p>
+                        
+                        <h4>📸 Deux types de captures :</h4>
+                        
+                        <h4>1. Capture de tout l'écran :</h4>
+                        <div class="shortcut">⌘ Cmd + ⇧ Maj + 3</div>
+                        <p>Cette combinaison capture instantanément tout votre écran. L'image sera automatiquement sauvegardée sur votre Bureau.</p>
+                        
+                        <h4>2. Capture d'une zone sélectionnée :</h4>
+                        <div class="shortcut">⌘ Cmd + ⇧ Maj + 4</div>
+                        <p>Votre curseur se transforme en réticule. Cliquez et faites glisser pour sélectionner la zone à capturer. Relâchez pour prendre la capture.</p>
+                        
+                        <h4>💡 Astuce bonus :</h4>
+                        <p>Après avoir appuyé sur Cmd+Maj+4, appuyez sur la barre d'espace pour capturer une fenêtre entière !</p>
+                    `,
+                    exercise: `
+                        <div class="exercise-box">
+                            <div class="exercise-title">🎯 Exercice Pratique</div>
+                            <p><strong>Étape 1 :</strong> Ouvrez le Finder</p>
+                            <p><strong>Étape 2 :</strong> Essayez Cmd+Maj+3 pour capturer tout l'écran</p>
+                            <p><strong>Étape 3 :</strong> Essayez Cmd+Maj+4 et sélectionnez juste la fenêtre du Finder</p>
+                            <p><strong>Étape 4 :</strong> Vérifiez que vos captures sont sur le Bureau</p>
+                            <button class="btn btn-success" onclick="completeExercise(1)">✅ Exercice terminé</button>
+                        </div>
+                    `
+                }
+            },
+            {
+                id: 2,
+                title: "Gérer les fenêtres Finder",
+                icon: "🗂️",
+                description: "Ouvrir plusieurs fenêtres Finder et organiser vos fichiers entre elles",
+                duration: "15 min",
+                content: {
+                    theory: `
+                        <h3>🎯 Objectif de la leçon</h3>
+                        <p>Apprendre à ouvrir plusieurs fenêtres Finder pour faciliter l'organisation de vos fichiers.</p>
+                        
+                        <h4>📂 Ouvrir une nouvelle fenêtre Finder :</h4>
+                        <div class="shortcut">⌘ Cmd + N</div>
+                        <p>Ou cliquez sur Fichier > Nouvelle fenêtre Finder</p>
+                        
+                        <h4>🔄 Organiser vos fenêtres :</h4>
+                        <p>• Faites glisser les fenêtres pour les positionner côte à côte</p>
+                        <p>• Utilisez Mission Control (F3) pour voir toutes vos fenêtres</p>
+                        <p>• Redimensionnez en tirant sur les coins</p>
+                        
+                        <h4>📋 Déplacer des fichiers :</h4>
+                        <p>• Cliquez et maintenez sur un fichier</p>
+                        <p>• Faites-le glisser vers l'autre fenêtre</p>
+                        <p>• Relâchez pour le déplacer</p>
+                    `,
+                    exercise: `
+                        <div class="exercise-box">
+                            <div class="exercise-title">🎯 Exercice Pratique</div>
+                            <p><strong>Étape 1 :</strong> Ouvrez le Finder</p>
+                            <p><strong>Étape 2 :</strong> Appuyez sur Cmd+N pour ouvrir une deuxième fenêtre</p>
+                            <p><strong>Étape 3 :</strong> Dans une fenêtre, allez dans Documents, dans l'autre allez sur le Bureau</p>
+                            <p><strong>Étape 4 :</strong> Placez les fenêtres côte à côte</p>
+                            <p><strong>Étape 5 :</strong> Créez un nouveau dossier et déplacez-le entre les fenêtres</p>
+                            <button class="btn btn-success" onclick="completeExercise(2)">✅ Exercice terminé</button>
+                        </div>
+                    `
+                }
+            },
+            {
+                id: 3,
+                title: "Renommer des fichiers",
+                icon: "✏️",
+                description: "Apprendre différentes méthodes pour renommer vos fichiers et dossiers",
+                duration: "8 min",
+                content: {
+                    theory: `
+                        <h3>🎯 Objectif de la leçon</h3>
+                        <p>Maîtriser les différentes façons de renommer vos fichiers pour mieux les organiser.</p>
+                        
+                        <h4>✏️ Méthode 1 - Double-clic lent :</h4>
+                        <p>• Cliquez une fois sur le fichier pour le sélectionner</p>
+                        <p>• Attendez 1 seconde, puis cliquez de nouveau sur le nom</p>
+                        <p>• Le nom devient modifiable</p>
+                        
+                        <h4>⌨️ Méthode 2 - Raccourci clavier :</h4>
+                        <div class="shortcut">Sélectionner le fichier + Entrée</div>
+                        <p>Plus rapide une fois que vous maîtrisez !</p>
+                        
+                        <h4>🖱️ Méthode 3 - Clic droit :</h4>
+                        <p>• Clic droit sur le fichier</p>
+                        <p>• Choisir "Renommer" dans le menu</p>
+                        
+                        <h4>💡 Conseils :</h4>
+                        <p>• Utilisez des noms descriptifs</p>
+                        <p>• Évitez les caractères spéciaux</p>
+                        <p>• Appuyez sur Entrée pour valider</p>
+                    `,
+                    exercise: `
+                        <div class="exercise-box">
+                            <div class="exercise-title">🎯 Exercice Pratique</div>
+                            <p><strong>Étape 1 :</strong> Créez un nouveau dossier sur le Bureau (Cmd+Maj+N)</p>
+                            <p><strong>Étape 2 :</strong> Renommez-le "Mes Documents" avec la méthode du double-clic</p>
+                            <p><strong>Étape 3 :</strong> Créez un autre dossier</p>
+                            <p><strong>Étape 4 :</strong> Renommez-le "Photos Vacances" avec la touche Entrée</p>
+                            <p><strong>Étape 5 :</strong> Essayez la méthode du clic droit sur l'un des dossiers</p>
+                            <button class="btn btn-success" onclick="completeExercise(3)">✅ Exercice terminé</button>
+                        </div>
+                    `
+                }
+            },
+            {
+                id: 4,
+                title: "Modes d'affichage du Finder",
+                icon: "👁️",
+                description: "Découvrir les différents modes d'affichage : icônes, liste, colonnes et Cover Flow",
+                duration: "12 min",
+                content: {
+                    theory: `
+                        <h3>🎯 Objectif de la leçon</h3>
+                        <p>Apprendre à changer l'affichage du Finder selon vos préférences et besoins.</p>
+                        
+                        <h4>🔍 Les 4 modes d'affichage :</h4>
+                        
+                        <h4>1. Affichage par icônes :</h4>
+                        <div class="shortcut">⌘ Cmd + 1</div>
+                        <p>Parfait pour voir rapidement le contenu visuel de vos dossiers</p>
+                        
+                        <h4>2. Affichage en liste :</h4>
+                        <div class="shortcut">⌘ Cmd + 2</div>
+                        <p>Idéal pour voir les détails (taille, date de modification, etc.)</p>
+                        
+                        <h4>3. Affichage en colonnes :</h4>
+                        <div class="shortcut">⌘ Cmd + 3</div>
+                        <p>Excellent pour naviguer dans l'arborescence de dossiers</p>
+                        
+                        <h4>4. Affichage Gallery :</h4>
+                        <div class="shortcut">⌘ Cmd + 4</div>
+                        <p>Parfait pour prévisualiser des images et documents</p>
+                        
+                        <h4>⚙️ Personnaliser l'affichage :</h4>
+                        <p>• Menu Présentation > Options de présentation</p>
+                        <p>• Ajustez la taille des icônes, l'espacement, etc.</p>
+                    `,
+                    exercise: `
+                        <div class="exercise-box">
+                            <div class="exercise-title">🎯 Exercice Pratique</div>
+                            <p><strong>Étape 1 :</strong> Ouvrez le Finder et allez dans le dossier Images</p>
+                            <p><strong>Étape 2 :</strong> Essayez Cmd+1 (icônes) - observez l'affichage</p>
+                            <p><strong>Étape 3 :</strong> Essayez Cmd+2 (liste) - notez les informations supplémentaires</p>
+                            <p><strong>Étape 4 :</strong> Essayez Cmd+3 (colonnes) - naviguez entre les dossiers</p>
+                            <p><strong>Étape 5 :</strong> Essayez Cmd+4 (Gallery) - idéal pour les images !</p>
+                            <p><strong>Étape 6 :</strong> Retournez en mode icônes et changez leur taille</p>
+                            <button class="btn btn-success" onclick="completeExercise(4)">✅ Exercice terminé</button>
+                        </div>
+                    `
+                }
+            },
+            {
+                id: 5,
+                title: "Organiser et trier les fichiers",
+                icon: "📋",
+                description: "Apprendre à trier par nom, date, taille et créer des groupes intelligents",
+                duration: "18 min",
+                content: {
+                    theory: `
+                        <h3>🎯 Objectif de la leçon</h3>
+                        <p>Maîtriser l'organisation et le tri de vos fichiers pour retrouver rapidement ce que vous cherchez.</p>
+                        
+                        <h4>📊 Options de tri :</h4>
+                        <p>Menu Présentation > Trier par :</p>
+                        <p>• <strong>Nom :</strong> Ordre alphabétique</p>
+                        <p>• <strong>Type :</strong> Groupe par format de fichier</p>
+                        <p>• <strong>Date de modification :</strong> Plus récents en premier</p>
+                        <p>• <strong>Taille :</strong> Du plus petit au plus grand</p>
+                        
+                        <h4>🏷️ Organiser par groupes :</h4>
+                        <p>Menu Présentation > Utiliser les groupes</p>
+                        <p>Regroupe automatiquement les fichiers similaires</p>
+                        
+                        <h4>🌈 Utiliser les étiquettes :</h4>
+                        <p>• Clic droit sur un fichier > étiquette</p>
+                        <p>• Choisissez une couleur pour catégoriser</p>
+                        <p>• Recherchez ensuite par couleur</p>
+                        
+                        <h4>📁 Créer des dossiers intelligents :</h4>
+                        <p>• Fichier > Nouveau dossier intelligent</p>
+                        <p>• Définissez des critères de recherche</p>
+                        <p>• Le dossier se met à jour automatiquement</p>
+                    `,
+                    exercise: `
+                        <div class="exercise-box">
+                            <div class="exercise-title">🎯 Exercice Pratique</div>
+                            <p><strong>Étape 1 :</strong> Ouvrez votre dossier Documents</p>
+                            <p><strong>Étape 2 :</strong> Triez par date de modification (Présentation > Trier par > Date de modification)</p>
+                            <p><strong>Étape 3 :</strong> Activez les groupes (Présentation > Utiliser les groupes)</p>
+                            <p><strong>Étape 4 :</strong> Sélectionnez quelques fichiers et ajoutez-leur des étiquettes colorées</p>
+                            <p><strong>Étape 5 :</strong> Triez par type pour voir vos fichiers regroupés par format</p>
+                            <p><strong>Étape 6 :</strong> Créez un dossier intelligent pour tous vos PDF</p>
+                            <button class="btn btn-success" onclick="completeExercise(5)">✅ Exercice terminé</button>
+                        </div>
+                    `
+                }
+            }
+        ];
+
+        // État de l'application
+        let currentLesson = null;
+        let completedLessons = new Set();
+        let studyTime = 0;
+        let streak = 0;
+
+        // Charger les données sauvegardées
+        function loadProgress() {
+            const saved = localStorage.getItem('macLearningProgress');
+            if (saved) {
+                const data = JSON.parse(saved);
+                completedLessons = new Set(data.completed || []);
+                studyTime = data.studyTime || 0;
+                streak = data.streak || 0;
+            }
+        }
+
+        // Sauvegarder les données
+        function saveProgress() {
+            const data = {
+                completed: Array.from(completedLessons),
+                studyTime: studyTime,
+                streak: streak
+            };
+            localStorage.setItem('macLearningProgress', JSON.stringify(data));
+        }
+
+        // Initialiser l'application
+        function initApp() {
+            loadProgress();
+            renderLessons();
+            updateProgress();
+            updateStats();
+            checkAchievements();
+        }
+
+        // Afficher les leçons
+        function renderLessons() {
+            const grid = document.getElementById('lessonGrid');
+            grid.innerHTML = '';
+
+            lessons.forEach(lesson => {
+                const isCompleted = completedLessons.has(lesson.id);
+                const card = document.createElement('div');
+                card.className = `lesson-card ${isCompleted ? 'completed' : ''}`;
+                card.onclick = () => showLesson(lesson.id);
+
+                card.innerHTML = `
+                    <div class="lesson-number ${isCompleted ? 'completed' : ''}">${lesson.id}</div>
+                    <div class="lesson-icon">${lesson.icon}</div>
+                    <div class="lesson-title">${lesson.title}</div>
+                    <div class="lesson-description">${lesson.description}</div>
+                    <div class="lesson-duration">${lesson.duration}</div>
+                    ${isCompleted ? '<div style="margin-top: 10px; color: #4CAF50; font-weight: bold;">✅ Terminée</div>' : ''}
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Afficher une leçon
+        function showLesson(lessonId) {
+            const lesson = lessons.find(l => l.id === lessonId);
+            if (!lesson) return;
+
+            currentLesson = lesson;
+            const detail = document.getElementById('lessonDetail');
+            
+            detail.innerHTML = `
+                <h2>${lesson.icon} ${lesson.title}</h2>
+                <div class="lesson-content">
+                    ${lesson.content.theory}
+                    ${lesson.content.exercise}
+                </div>
+                <button class="btn btn-secondary" onclick="backToLessons()">← Retour aux leçons</button>
+            `;
+
+            document.getElementById('lessonGrid').style.display = 'none';
+            detail.classList.add('active');
+            document.getElementById('backBtn').style.display = 'flex';
+        }
+
+        // Retourner à la liste des leçons
+        function backToLessons() {
+            document.getElementById('lessonGrid').style.display = 'grid';
+            document.getElementById('lessonDetail').classList.remove('active');
+            document.getElementById('backBtn').style.display = 'none';
+            currentLesson = null;
+        }
+
+        // Terminer un exercice
+        function completeExercise(lessonId) {
+            completedLessons.add(lessonId);
+            studyTime += 10; // 10 minutes par leçon
+            
+            // Animation de succès
+            const btn = event.target;
+            btn.style.background = '#4CAF50';
+            btn.innerHTML = '🎉 Félicitations !';
+            
+            setTimeout(() => {
+                saveProgress();
+                updateProgress();
+                updateStats();
+                checkAchievements();
+                renderLessons();
+                backToLessons();
+            }, 1500);
+        }
+
+        // Mettre à jour la barre de progression
+        function updateProgress() {
+            const progress = (completedLessons.size / lessons.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Mettre à jour les statistiques
+        function updateStats() {
+            document.getElementById('completedLessons').textContent = completedLessons.size;
+            document.getElementById('totalTime').textContent = studyTime;
+            document.getElementById('streak').textContent = streak;
+        }
+
+        // Vérifier les achievements
+        function checkAchievements() {
+            const achievementsDiv = document.getElementById('achievements');
+            achievementsDiv.innerHTML = '<h2>🏆 Vos Réussites</h2>';
+
+            const achievements = [
+                { condition: completedLessons.size >= 1, text: '🎯 Première leçon terminée !', id: 'first' },
+                { condition: completedLessons.size >= 3, text: '🔥 3 leçons maîtrisées !', id: 'three' },
+                { condition: completedLessons.size === lessons.length, text: '👑 Expert macOS !', id: 'master' },
+                { condition: studyTime >= 60, text: '⏰ Une heure d\'apprentissage !', id: 'hour' }
+            ];
+
+            achievements.forEach(achievement => {
+                if (achievement.condition) {
+                    const div = document.createElement('div');
+                    div.className = 'achievement';
+                    div.innerHTML = `<strong>${achievement.text}</strong>`;
+                    achievementsDiv.appendChild(div);
+                }
+            });
+        }
+
+        // Gérer les onglets
+        function showTab(tabName) {
+            // Cacher tous les onglets
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Retirer la classe active de tous les boutons
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Afficher l'onglet sélectionné
+            document.getElementById(tabName + 'Tab').style.display = 'block';
+            event.target.classList.add('active');
+
+            // Retourner à la liste si on était dans une leçon
+            if (currentLesson && tabName === 'lessons') {
+                backToLessons();
+            }
+        }
+
+        // Gestionnaire pour le bouton retour
+        document.getElementById('backBtn').onclick = backToLessons;
+
+        // Initialiser l'application au chargement
+        window.onload = initApp;
+
+        // Simuler une progression quotidienne
+        setInterval(() => {
+            const now = new Date();
+            const lastVisit = localStorage.getItem('lastVisit');
+            const today = now.toDateString();
+            
+            if (lastVisit !== today) {
+                if (completedLessons.size > 0) {
+                    streak++;
+                    saveProgress();
+                    updateStats();
+                }
+                localStorage.setItem('lastVisit', today);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
